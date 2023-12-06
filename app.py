@@ -35,17 +35,15 @@ def generate_confusion_matrix(model, data_generator):
     conf_matrix = confusion_matrix(y_true, y_pred.argmax(axis=1))
 
     return conf_matrix
-
+class_labels = {0:'COVID', 1: 'NORMAL', 2:'PNEUMONIA'}
 
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'})
+    file = request.files.get('file')    
+    print(request.data)
 
-    file = request.files['file']
-
-    if file.filename == '':
+    if file== None:
         return jsonify({'error': 'No selected file'})
 # Save the uploaded image temporarily
     if file:
@@ -60,10 +58,7 @@ def predict():
 
         # Get the predicted class label
         predicted_class = np.argmax(prediction, axis=1)[0]
-
-        # You may want to map the class labels to their corresponding names
-        class_labels = train_generator.class_indices
-        class_name = [k for k, v in class_labels.items() if v == predicted_class][0]
+        class_name = class_labels[predicted_class]
 
         return jsonify({'class_name': class_name, 'prediction': float(prediction[0][predicted_class])})
 
