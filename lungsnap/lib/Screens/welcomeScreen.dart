@@ -14,13 +14,13 @@ List items = [
     "header": "Quick Scans",
     "description":
         "Experience the convenience of rapid X-ray scans, providing swift insights into your respiratory health. Your journey to clarity starts here.",
-    "image": "assets/welcomeImages/scan.png",
+    "image": "assets/welcomeImages/123.jpg",
   },
   {
     "header": "Health Insights",
     "description":
         "Unlock a wealth of health information as we analyze asnd interpret your X-ray images, offering detailed insights into your thoracic well-being.",
-    "image": "assets/welcomeImages/insights.png",
+    "image": "assets/welcomeImages/456.jpg",
   },
 ];
 
@@ -113,7 +113,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 return slides[index];
               },
             ),
-            if (currentPage.round() == 2.0)
+            if (currentPage.round() == 1.0)
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
