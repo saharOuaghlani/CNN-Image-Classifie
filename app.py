@@ -53,10 +53,11 @@ def predict():
     if file:
         img_path = "temp/temp.jpg"  
         file.save(img_path)
-        return jsonify({'testStatus':"ok"})    
-"""
         # Preprocess the image
-        img_array = preprocess_image(img_path)
+     #   img_array = preprocess_image(img_path)
+        return jsonify({'test':"image received"})    
+"""
+
 
         # Make prediction
         prediction = model.predict(img_array)
