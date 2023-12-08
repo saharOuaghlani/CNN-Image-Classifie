@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
-import 'package:lungsnap/Services/Service_image.dart';
+import 'package:lungsnap/Screens/resultScreen.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -231,49 +231,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      ServiceImage()
-                                          .uploadImage(File(image.path));
-                                      Navigator.pop(context);
-
-                                      /* try {
-                                        //getting the audit folder name if exists
-                                         int auditId =
-                                            Provider.of<CurrentWorkingAudit>(
-                                                    context,
-                                                    listen: false)
-                                                .workingAudit
-                                                .id!;
-                                        String pathToFolder =
-                                            await InitConfiguration
-                                                .createAuditFolderInAppDocDir(
-                                                    auditId.toString());
-
-                                        String imageName = DateTime.now()
-                                            .toString()
-                                            .substring(0, 19);
-                                        await image.saveTo(
-                                            '$pathToFolder$imageName.jpeg');  
-                                        //await Future.delayed(const Duration(seconds: 1));
-
-                                        if (!mounted) return;
-
-                                        await Navigator.of(context)
-                                            .pushReplacement(
+                                      Navigator.pushReplacement(
+                                          context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                DisplayPictureScreen(
-                                              // Pass the generated path to
-                                              // the DisplayPictureScreen widget + criteria id .
-                                              imagePath:
-                                                  pathToFolder + imageName,
-                                              idCriteria: widget.idCriteria,
-                                            ),
-                                          ),
-                                        );
-                                      } on Exception catch (e) {
-                                        developer.log(e.toString(),
-                                            name: "exception in saving image");
-                                      } */
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                    // Pass the appropriate camera to the TakePictureScreen widget.
+                                                    image: File(image.path),
+                                                  )));
                                     },
                                     icon: Icon(
                                       Icons.check,
@@ -456,46 +421,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-//upload image to base
-
-                                      /*              try {
-                                        //getting the audit folder name if exists
-                                        int auditId =
-                                            Provider.of<CurrentWorkingAudit>(
-                                                    context,
-                                                    listen: false)
-                                                .workingAudit
-                                                .id!;
-                                        String pathToFolder =
-                                            await InitConfiguration
-                                                .createAuditFolderInAppDocDir(
-                                                    auditId.toString());
-
-                                        String imageName = DateTime.now()
-                                            .toString()
-                                            .substring(0, 19);
-                                        image.saveTo(
-                                            '$pathToFolder$imageName.jpeg');
-
-                                        if (!mounted) return;
-
-                                        await Navigator.of(context)
-                                            .pushReplacement(
+                                      Navigator.push(
+                                          context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                DisplayPictureScreen(
-                                              // Pass the generated path to
-                                              // the DisplayPictureScreen widget + criteria id .
-                                              imagePath:
-                                                  pathToFolder + imageName,
-                                              idCriteria: widget.idCriteria,
-                                            ),
-                                          ),
-                                        );
-                                      } on Exception catch (e) {
-                                        developer.log(e.toString(),
-                                            name: "exception in saving image");
-                                      } */
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                    // Pass the appropriate camera to the TakePictureScreen widget.
+                                                    image: File(image.path),
+                                                  )));
                                     },
                                     icon: Icon(
                                       Icons.check,
