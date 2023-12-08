@@ -2,9 +2,10 @@ import tensorflow as tf
 from flask import Flask, request, jsonify
 from tensorflow.keras.preprocessing import image
 import numpy as np
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix
+import pickle
 
-app = Flask(__name__)
+app = Flask(_name_)
 app.config.update(dict(
     DEBUG=True,
     MAIL_SERVER='localhost',
@@ -13,9 +14,14 @@ app.config.update(dict(
     MAIL_USERNAME=None,
     MAIL_PASSWORD=None,
 ))
+class_labels = {0:'COVID', 1: 'NORMAL', 2:'PNEUMONIA'}
 
 # Load the trained model
 model = tf.keras.models.load_model('CNN.h5')
+
+#Load the test generator
+with open('test_generator_info.pkl', 'rb') as file:
+    test_generator = pickle.load(file)
 
 # Resize the input  images
 target_size = (256, 256)
@@ -34,8 +40,8 @@ def generate_confusion_matrix(model, data_generator):
     # Generate a confusion matrix
     conf_matrix = confusion_matrix(y_true, y_pred.argmax(axis=1))
 
-    return conf_matrix
-class_labels = {0:'COVID', 1: 'NORMAL', 2:'PNEUMONIA'}
+    return conf_matrix ,classification_report(y_true, y_pred.argmax(axis=1))
+
 
 
 @app.route('/api/predict', methods=['POST'])
@@ -46,7 +52,7 @@ def predict():
     if file== None:
         return jsonify({'error': 'No selected file'})
 # Save the uploaded image temporarily
-    if file:
+    if file :
         img_path = "temp/temp.jpg"  
         file.save(img_path)
 
@@ -62,12 +68,36 @@ def predict():
 
         return jsonify({'class_name': class_name, 'prediction': float(prediction[0][predicted_class])})
 
-@app.route('/api/confusion_matrix', methods=['GET'])
+@app.route('/api/infos', methods=['GET'])
 def get_confusion_matrix():
-    conf_matrix = generate_confusion_matrix(model, test_generator)
-    return jsonify({'confusion_matrix': conf_matrix.tolist()})
+    
+    conf_matrix, classificationReport = generate_confusion_matrix(model, test_generator)
+
+    # Evaluate the model on the validation set
+    validation_loss, validation_accuracy = model.evaluate(test_generator)
+    print("Validation Accuracy:", validation_accuracy)
+    print("Validation Accuracy:", validation_loss)
+    print("Classification Report:" ,classificationReport)
+    print("Confusion Matrix:", conf_matrix)
+    
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    # Evaluate the model on the test data
+    #64 is the batch size
+    test_loss, test_accuracy = model.evaluate(
+        test_generator,
+        steps=test_generator.samples //64 
+    )
 
+    print("Test Loss:", test_loss)
+    print("Test Accuracy:", test_accuracy)
+
+    # Print a summary of your model architecture
+    model.summary()
+    return jsonify({"hello"})
+
+
+
+
+if _name_ == '_main_':
+    app.run(debug=True,host='0.0.0.0')
