@@ -3,7 +3,7 @@ import 'package:lungsnap/Screens/welcomeScreen.dart';
 import 'package:lungsnap/Services/Service_image.dart';
 
 void main() async {
-  await ServiceImage().connectToServer();
+  print(await ServiceImage().connectToServer());
   runApp(const MyApp());
 }
 

@@ -1,8 +1,8 @@
-#import tensorflow as tf
+import tensorflow as tf
 from flask import Flask, request, jsonify
-#from tensorflow.keras.preprocessing import image
-#import numpy as np
-#from sklearn.metrics import confusion_matrix
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from sklearn.metrics import confusion_matrix
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -15,7 +15,7 @@ app.config.update(dict(
 ))
 
 # Load the trained model
-#model = tf.keras.models.load_model('CNN.h5')
+model = tf.keras.models.load_model('CNN.h5')
 
 # Resize the input  images
 target_size = (256, 256)
@@ -25,7 +25,7 @@ def preprocess_image(img_path):
     img_array = np.expand_dims(img_array, axis=0)
     img_array /= 255.0  # Normalize pixel values to be between 0 and 1
     return img_array
-"""
+
 def generate_confusion_matrix(model, data_generator):
     # Get predictions on the validation set
     y_pred = model.predict(data_generator)
@@ -35,12 +35,8 @@ def generate_confusion_matrix(model, data_generator):
     conf_matrix = confusion_matrix(y_true, y_pred.argmax(axis=1))
 
     return conf_matrix
-"""
 class_labels = {0:'COVID', 1: 'NORMAL', 2:'PNEUMONIA'}
 
-@app.route('/api/testcnx',methods=['GET'])
-def test():
-    return jsonify({'testCnx':"ok"})
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
@@ -53,13 +49,9 @@ def predict():
     if file:
         img_path = "temp/temp.jpg"  
         file.save(img_path)
-        # Preprocess the image
-     #   img_array = preprocess_image(img_path)
-       # return jsonify({'test':"image received"})  
-        #return jsonify({'class_name': "COVID", 'prediction': 20.0})  
-        return jsonify({'class_name': "NORMAL", 'prediction': 90.0})  
-"""
 
+        # Preprocess the image
+        img_array = preprocess_image(img_path)
 
         # Make prediction
         prediction = model.predict(img_array)
@@ -68,15 +60,13 @@ def predict():
         predicted_class = np.argmax(prediction, axis=1)[0]
         class_name = class_labels[predicted_class]
 
-        return jsonify({'class_name': class_name, 'prediction': float(prediction[0][predicted_class])})"""
-       
-"""
+        return jsonify({'class_name': class_name, 'prediction': float(prediction[0][predicted_class])})
+
 @app.route('/api/confusion_matrix', methods=['GET'])
 def get_confusion_matrix():
     conf_matrix = generate_confusion_matrix(model, test_generator)
     return jsonify({'confusion_matrix': conf_matrix.tolist()})
 
-"""
+
 if __name__ == '__main__':
     app.run(debug=True)
-
