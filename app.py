@@ -94,7 +94,7 @@ def get_confusion_matrix():
 
     # Print a summary of your model architecture
     model.summary()
-    return jsonify({"hello"})
+    return jsonify({'Confusion Matrix': conf_matrix,'Validation Accuracy':validation_accuracy,'Validation Accuracy':validation_accuracy,'Classification Report':classificationReport})
 
 
 
