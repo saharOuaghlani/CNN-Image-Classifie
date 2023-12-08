@@ -35,6 +35,24 @@ class ServiceImage {
     return null;
   }
 
+  Future<Map<String, dynamic>?> getModelMatrix() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/confusion_matrix'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> res =
+          json.decode(response.body) as Map<String, dynamic>;
+      print(res);
+      return res;
+    } else {
+      throw Exception('Failed to connect to server');
+    }
+  }
+
   Future<String?> connectToServer() async {
     final response = await http.get(
       Uri.parse('$baseUrl/testcnx'),
@@ -48,7 +66,7 @@ class ServiceImage {
       print(res);
       return res['testCnx'] as String;
     } else {
-      throw Exception('Failed to register user');
+      throw Exception('Failed to connect to server');
     }
   }
 }

@@ -29,10 +29,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _pageViewController = new PageController();
   List<Widget> slides = items
       .map((item) => Container(
-          padding: EdgeInsets.symmetric(horizontal: 18.0),
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
           child: Column(
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Flexible(
@@ -48,18 +48,18 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 30.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 30.0),
                   child: Column(
                     children: <Widget>[
                       Text(item['header'],
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 30.0,
                               fontWeight: FontWeight.w300,
                               color: Color(0XFF3F3D56),
                               height: 2.0)),
                       Text(
                         item['description'],
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.grey,
                             letterSpacing: 1.2,
                             fontSize: 16.0,
@@ -76,13 +76,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   List<Widget> indicator() => List<Widget>.generate(
       slides.length,
       (index) => Container(
-            margin: EdgeInsets.symmetric(horizontal: 3.0),
+            margin: const EdgeInsets.symmetric(horizontal: 3.0),
             height: 10.0,
             width: 10.0,
             decoration: BoxDecoration(
                 color: currentPage.round() == index
-                    ? Color(0XFF256075)
-                    : Color(0XFF256075).withOpacity(0.2),
+                    ? const Color(0XFF256075)
+                    : const Color(0XFF256075).withOpacity(0.2),
                 borderRadius: BorderRadius.circular(10.0)),
           ));
   @override
@@ -94,8 +94,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  margin: EdgeInsets.only(top: 70.0),
-                  padding: EdgeInsets.symmetric(vertical: 40.0),
+                  margin: const EdgeInsets.only(top: 70.0),
+                  padding: const EdgeInsets.symmetric(vertical: 40.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: indicator(),
@@ -117,8 +117,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  margin: EdgeInsets.only(top: 70.0),
-                  padding: EdgeInsets.symmetric(vertical: 40.0),
+                  margin: const EdgeInsets.only(top: 70.0),
+                  padding: const EdgeInsets.symmetric(vertical: 40.0),
                   child: Padding(
                     padding: const EdgeInsets.all(50.0),
                     child: ElevatedButton(
@@ -129,9 +129,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
+                                  builder: (context) => const HomeScreen()));
                         },
-                        child: Text(
+                        child: const Text(
                           "Start",
                           style: TextStyle(color: Colors.white, fontSize: 20),
                         )),

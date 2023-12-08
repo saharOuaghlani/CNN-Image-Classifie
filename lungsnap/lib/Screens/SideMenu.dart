@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lungsnap/Constants/appColors.dart';
 
+import 'MoadelInfo.dart';
+
 class SideMenu extends StatelessWidget {
   const SideMenu({Key? key});
 
@@ -140,6 +142,14 @@ class SideMenu extends StatelessWidget {
             ),
             const SizedBox(
               height: 10,
+            ),
+            ListTile(
+              title: const Text('About LungSnap'),
+              leading: const Icon(Icons.info_outline),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const AboutAppTrainModel())),
             ),
             const Divider(),
             ListTile(
