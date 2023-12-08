@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.preprocessing import image
 import numpy as np
 from sklearn.metrics import confusion_matrix
+import pickle
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -16,6 +17,11 @@ app.config.update(dict(
 
 # Load the trained model
 model = tf.keras.models.load_model('CNN.h5')
+
+#Load the test generator
+with open('test_generator.pkl', 'rb') as file:
+    test_generator = pickle.load(file) 
+
 
 # Resize the input  images
 target_size = (256, 256)
@@ -46,7 +52,7 @@ def predict():
     if file== None:
         return jsonify({'error': 'No selected file'})
 # Save the uploaded image temporarily
-    if file:
+    if file :
         img_path = "temp/temp.jpg"  
         file.save(img_path)
 
