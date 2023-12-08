@@ -5,28 +5,27 @@ import 'package:lungsnap/Constants/TextInputs.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceImage {
-  final String baseUrl = '$baseCnxUrl';
+  final String baseUrl = '$baseCnxUrl/api';
 
-  Future<Map<String, dynamic>?> uploadImage(File imageFile) async {
+  Future<Map<String, dynamic>?> uploadImageAndPredict(File imageFile) async {
     try {
-      final url = Uri.parse('$baseCnxUrl/api/predict');
+      final url = Uri.parse('$baseUrl/predict');
       final request = http.MultipartRequest('POST', url);
       request.files.add(http.MultipartFile(
         'file',
         imageFile.readAsBytes().asStream(),
         imageFile.lengthSync(),
-        filename: "theFileName",
+        filename: "userImage",
       ));
 
       final response = await request.send();
       if (response.statusCode == 200) {
-        // Image uploaded successfully
         String responseBody = await response.stream.bytesToString();
         Map<String, dynamic> data = json.decode(responseBody);
-        print('Response from server: ${data['test']}');
+        print(
+            'Response from server: ${data['class_name']} ${data['prediction']}');
         return data;
       } else {
-        // Image upload failed
         print('Image upload failed with status code: ${response.statusCode}');
         print('Response from server: ${await response.stream.bytesToString()}');
       }
@@ -38,7 +37,7 @@ class ServiceImage {
 
   Future<String?> connectToServer() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/api/testcnx'),
+      Uri.parse('$baseUrl/testcnx'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

@@ -11,15 +11,15 @@ class WelcomeScreen extends StatefulWidget {
 
 List items = [
   {
-    "header": "Quick Scans",
+    "header": "Test Lung Images",
     "description":
-        "Experience the convenience of rapid X-ray scans, providing swift insights into your respiratory health. Your journey to clarity starts here.",
+        "Explore the power of our machine learning model by testing various lung images. Determine the accuracy in classifying COVID, NORMAL, and PNEUMONIA cases.",
     "image": "assets/welcomeImages/123.jpg",
   },
   {
     "header": "Health Insights",
     "description":
-        "Unlock a wealth of health information as we analyze asnd interpret your X-ray images, offering detailed insights into your thoracic well-being.",
+        "Unlock a wealth of health information as we analyze and interpret your X-ray images, offering detailed insights into your thoracic well-being.",
     "image": "assets/welcomeImages/456.png",
   },
 ];

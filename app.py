@@ -55,7 +55,9 @@ def predict():
         file.save(img_path)
         # Preprocess the image
      #   img_array = preprocess_image(img_path)
-        return jsonify({'test':"image received"})    
+       # return jsonify({'test':"image received"})  
+        #return jsonify({'class_name': "COVID", 'prediction': 20.0})  
+        return jsonify({'class_name': "NORMAL", 'prediction': 90.0})  
 """
 
 
