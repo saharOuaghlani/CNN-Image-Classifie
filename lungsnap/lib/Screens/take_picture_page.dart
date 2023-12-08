@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
-import 'package:lungsnap/Services/Service_image.dart';
+import 'package:lungsnap/Screens/resultScreen.dart';
 
 class TakePictureScreen extends StatefulWidget {
   const TakePictureScreen({
@@ -231,9 +231,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      ServiceImage()
-                                          .uploadImage(File(image.path));
-                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                    // Pass the appropriate camera to the TakePictureScreen widget.
+                                                    image: File(image.path),
+                                                  )));
                                     },
                                     icon: Icon(
                                       Icons.check,
@@ -416,9 +421,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                                   ),
                                   IconButton(
                                     onPressed: () async {
-                                      ServiceImage()
-                                          .uploadImage(File(image.path));
-                                      Navigator.pop(context);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ResultScreen(
+                                                    // Pass the appropriate camera to the TakePictureScreen widget.
+                                                    image: File(image.path),
+                                                  )));
                                     },
                                     icon: Icon(
                                       Icons.check,

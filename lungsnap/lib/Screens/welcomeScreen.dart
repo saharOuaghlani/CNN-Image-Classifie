@@ -20,7 +20,7 @@ List items = [
     "header": "Health Insights",
     "description":
         "Unlock a wealth of health information as we analyze asnd interpret your X-ray images, offering detailed insights into your thoracic well-being.",
-    "image": "assets/welcomeImages/456.jpg",
+    "image": "assets/welcomeImages/456.png",
   },
 ];
 
@@ -131,7 +131,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               MaterialPageRoute(
                                   builder: (context) => HomeScreen()));
                         },
-                        child: Text("Démarrer")),
+                        child: Text(
+                          "Start",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        )),
                   ),
                 ),
               ),

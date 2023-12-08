@@ -3,33 +3,34 @@ import 'package:flutter/services.dart';
 import 'package:lungsnap/Constants/appColors.dart';
 
 class SideMenu extends StatelessWidget {
-  const SideMenu({super.key});
+  const SideMenu({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    Future ExitApp() {
+    Future<void> exitApp() {
       return showDialog<void>(
         context: context,
-        barrierDismissible: false, // user must tap button!
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Center(child: Text('Quitter l\'application')),
+            title: const Center(child: Text('Exit the application')),
             content: SingleChildScrollView(
               child: ListBody(
                 children: const <Widget>[
-                  Text('Vous allez quitter l\'application ?'),
+                  Text('Are you sure you want to exit the application?'),
                 ],
               ),
             ),
             actions: <Widget>[
               TextButton(
-                  child: const Text('Annuler',
-                      style: TextStyle(color: secondaryColor)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
+                child: const Text('Cancel',
+                    style: TextStyle(color: secondaryColor)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
               TextButton(
-                child: const Text('Quitter',
+                child: const Text('Exit',
                     style: TextStyle(
                         color: errorColor,
                         fontWeight: FontWeight.w600,
@@ -44,16 +45,16 @@ class SideMenu extends StatelessWidget {
       );
     }
 
-    Future shareApp() {
+    Future<void> shareApp() {
       return showDialog<void>(
         context: context,
-        barrierDismissible: true, // user must tap button!
+        barrierDismissible: true,
         builder: (BuildContext context) {
           return AlertDialog(
             actionsAlignment: MainAxisAlignment.center,
             title: const Center(
                 child: Text(
-              'Noter et partager ',
+              'Rate and Share ',
               style: TextStyle(
                   color: primaryColor,
                   fontStyle: FontStyle.italic,
@@ -63,20 +64,21 @@ class SideMenu extends StatelessWidget {
               child: ListBody(
                 children: <Widget>[
                   Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(5, (index) {
-                        return Icon(
-                          index < 4 ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                          size: 45,
-                        );
-                      })),
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return Icon(
+                        index < 4 ? Icons.star : Icons.star_border,
+                        color: Colors.amber,
+                        size: 45,
+                      );
+                    }),
+                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   const Text(
-                    'Parlez-en à vos amis, à votre famille et à vos voisins.',
+                    'Tell your friends, family, and neighbors about LungSnap.',
                     style: TextStyle(fontStyle: FontStyle.italic),
                     textAlign: TextAlign.center,
                   ),
@@ -87,19 +89,19 @@ class SideMenu extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
-                          color: const Color.fromARGB(255, 10, 233, 2),
+                          color: Color.fromARGB(255, 44, 44, 44),
                           iconSize: 50,
-                          onPressed: () => print("share what's up"),
-                          icon: const Icon(Icons.whatshot)),
+                          onPressed: () => print("share on Tiktok"),
+                          icon: const Icon(Icons.tiktok)),
                       IconButton(
                           color: const Color.fromRGBO(56, 83, 149, 1),
                           iconSize: 50,
-                          onPressed: () => print("share facebook"),
+                          onPressed: () => print("share on Facebook"),
                           icon: const Icon(Icons.facebook)),
                       IconButton(
                           color: const Color.fromRGBO(3, 169, 244, 0.9),
                           iconSize: 50,
-                          onPressed: () => print("share what's up"),
+                          onPressed: () => print("share via Message"),
                           icon: const Icon(Icons.message_outlined)),
                     ],
                   ),
@@ -112,7 +114,7 @@ class SideMenu extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 child: const Text(
-                  "Fermer",
+                  "Close",
                   style: TextStyle(fontSize: 15, color: Colors.grey),
                 ),
               ),
@@ -125,7 +127,6 @@ class SideMenu extends StatelessWidget {
     return SafeArea(
       child: Drawer(
         child: ListView(
-          // Remove padding
           padding: EdgeInsets.zero,
           children: [
             const UserAccountsDrawerHeader(
@@ -134,7 +135,7 @@ class SideMenu extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill,
-                    image: AssetImage("assets/welcomeImages/123.jpg")),
+                    image: AssetImage("assets/welcomeImages/sideBar.jpg")),
               ),
             ),
             const SizedBox(
@@ -143,15 +144,15 @@ class SideMenu extends StatelessWidget {
             const Divider(),
             ListTile(
               leading: const Icon(Icons.share),
-              title: const Text('Partager'),
+              title: const Text('Share LungSnap'),
               onTap: () => shareApp(),
             ),
             const Divider(),
             ListTile(
-                title: const Text('Fermer l\'applcation'),
-                leading: const Icon(Icons.exit_to_app),
-                onTap: () => ExitApp() //=> exit application(),
-                ),
+              title: const Text('Exit application'),
+              leading: const Icon(Icons.exit_to_app),
+              onTap: () => exitApp(),
+            ),
           ],
         ),
       ),

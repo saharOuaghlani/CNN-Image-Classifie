@@ -26,10 +26,10 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
         backgroundColor: backgroundColor,
         centerTitle: true,
-        title: const Text("Rédiger un nouveau blog",
+        title: const Text("Scan results",
             style: TextStyle(
                 color: Colors.black,
-                fontSize: 26,
+                fontSize: 22,
                 fontWeight: FontWeight.bold)),
         elevation: 0,
         shape:
@@ -40,24 +40,30 @@ class _ResultScreenState extends State<ResultScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.file(widget.image),
+              child: Image.file(
+                widget.image,
+                fit: BoxFit.fitWidth,
+                alignment: Alignment.bottomCenter,
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
-            FutureBuilder(
-                future: ServiceImage().uploadImage(widget.image),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    Map<String, dynamic> res =
-                        snapshot.data as Map<String, dynamic>;
-                    return Text(res["test"]);
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-            SizedBox(
+            Center(
+              child: FutureBuilder(
+                  future: ServiceImage().uploadImage(widget.image),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done &&
+                        snapshot.hasData) {
+                      Map<String, dynamic> res =
+                          snapshot.data as Map<String, dynamic>;
+                      return Text(res["test"]);
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
+            ),
+            const SizedBox(
               height: 20,
             )
           ],
