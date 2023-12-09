@@ -3,7 +3,9 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.preprocessing import image
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import pickle
+
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -19,9 +21,20 @@ class_labels = {0:'COVID', 1: 'NORMAL', 2:'PNEUMONIA'}
 # Load the trained model
 model = tf.keras.models.load_model('CNN.h5')
 
-#Load the test generator
+# Load the information to recreate the generator
 with open('test_generator_info.pkl', 'rb') as file:
-    test_generator = pickle.load(file)
+    test_generator_info = pickle.load(file)
+
+# Function to recreate the generator
+def recreate_test_generator():
+    datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=False,
+        validation_split=0.2,
+    )
+    return datagen.flow_from_directory(**test_generator_info)
 
 # Resize the input  images
 target_size = (256, 256)
@@ -32,17 +45,14 @@ def preprocess_image(img_path):
     img_array /= 255.0  # Normalize pixel values to be between 0 and 1
     return img_array
 
-def generate_confusion_matrix(model, data_generator):
-    # Get predictions on the validation set
-    y_pred = model.predict(data_generator)
-    y_true = data_generator.classes
-
+def generate_confusion_matrix(model, test_generator):
+    # Get predictions on the test set
+    y_pred = model.predict(test_generator)
+    # Get true labels from the test generator
+    y_true = test_generator.labels
     # Generate a confusion matrix
     conf_matrix = confusion_matrix(y_true, y_pred.argmax(axis=1))
-
-    return conf_matrix ,classification_report(y_true, y_pred.argmax(axis=1))
-
-
+    return conf_matrix
 
 @app.route('/api/predict', methods=['POST'])
 def predict():
@@ -69,35 +79,23 @@ def predict():
         return jsonify({'class_name': class_name, 'prediction': float(prediction[0][predicted_class])})
 
 @app.route('/api/infos', methods=['GET'])
-def get_confusion_matrix():
-    
-    conf_matrix, classificationReport = generate_confusion_matrix(model, test_generator)
-
+def get_info():
+    # Recreate the test generator
+    test_generator = recreate_test_generator()
+    # Generate confusion matrix and classification report
+    conf_matrix = generate_confusion_matrix(model, test_generator)
     # Evaluate the model on the validation set
     validation_loss, validation_accuracy = model.evaluate(test_generator)
-    print("Validation Accuracy:", validation_accuracy)
-    print("Validation Accuracy:", validation_loss)
-    print("Classification Report:" ,classificationReport)
-    print("Confusion Matrix:", conf_matrix)
     
+    # Additional code to get validation metrics
+    validation_metrics = {
+        'validation_accuracy': validation_accuracy,
+        'validation_loss': validation_loss,
+        'confusion_matrix': conf_matrix.tolist(),  
+    }
 
-
-    # Evaluate the model on the test data
-    #64 is the batch size
-    test_loss, test_accuracy = model.evaluate(
-        test_generator,
-        steps=test_generator.samples //64 
-    )
-
-    print("Test Loss:", test_loss)
-    print("Test Accuracy:", test_accuracy)
-
-    # Print a summary of your model architecture
-    model.summary()
-    return jsonify({'Confusion Matrix': conf_matrix,'Validation Accuracy':validation_accuracy,'Validation Accuracy':validation_accuracy,'Classification Report':classificationReport})
-
-
-
-
+    return jsonify(validation_metrics)
+    
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.config['TIMEOUT'] = 360  
+    app.run(debug=False, host='0.0.0.0')
